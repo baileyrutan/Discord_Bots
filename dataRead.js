@@ -39,3 +39,6 @@ module.exports =
 	}
 
 }
+
+// References: 
+// https://stackoverflow.com/questions/47035889/javascript-node-read-from-csv-file-and-store-data-into-object
