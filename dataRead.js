@@ -1,3 +1,7 @@
+// Author: Bailey Dishman
+// File: dataRead.js
+// File Created: 11/18/2019
+
 const csv = require('csv');
 const fs = require('fs');
 
@@ -39,6 +43,3 @@ module.exports =
 	}
 
 }
-
-// References: 
-// https://stackoverflow.com/questions/47035889/javascript-node-read-from-csv-file-and-store-data-into-object
