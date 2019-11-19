@@ -8,12 +8,12 @@ const fs = require('fs');
 module.exports = 
 {
 
-	readInData : function()
+	readInData : function(file)
 	{
 		
 		const response = [];
 
-		let readStream = fs.createReadStream('responseData.csv');
+		let readStream = fs.createReadStream(file);
 
 		let parser = csv.parse({columns:true});
 
@@ -43,3 +43,6 @@ module.exports =
 	}
 
 }
+
+// References: 
+// https://stackoverflow.com/questions/47035889/javascript-node-read-from-csv-file-and-store-data-into-object

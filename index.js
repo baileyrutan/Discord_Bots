@@ -3,13 +3,16 @@
 // File Created: 10/27/2019
 
 const data = require('./dataRead.js');
+const randomQuote = require('./randomizeResponse.js');
 const Discord = require('discord.js');
 const GabeBot = new Discord.Client();
 
-const response = data.readInData();
+const responseData = data.readInData('responseData.csv');
 
 // On message received, begin executing this code
 // IF previous message is NOT from Gabebot, proceed
+// IF previous message contains a 'trigger',
+// send a message with the associated 'quote'
 GabeBot.on('message', (message) => 
 {
 	
@@ -19,20 +22,13 @@ GabeBot.on('message', (message) =>
 		let messageContent = message.content;
 		messageContent = messageContent.toLowerCase();
 		
-		for(let i = 0; i < response.length; i++)
-		{
-			
-			if(messageContent.includes(response[i]['trigger']))
-			{
-			
-				message.channel.send(response[i]['quote']);
-				
-			}
-		
-		}
-		
+		const quote = randomQuote.randomQuote(messageContent, responseData);
+
+		message.channel.send(quote);
+
 	}
 	
 });
 
 GabeBot.login('ENTERTOKENHERE');
+
