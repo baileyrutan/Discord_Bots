@@ -1,2 +1,2 @@
-# Discord_Bots
-Discord Bots that I have created. 
+# Discord Chat Bots
+Discord chat bots that I have created. 
