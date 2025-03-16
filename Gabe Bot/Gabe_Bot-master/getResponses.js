@@ -7,7 +7,6 @@ module.exports =
 
 	getResponses : function(message, responseData, responses)
 	{
-		
 		let responseCounter = 0;
 		let quote = 0;
 		

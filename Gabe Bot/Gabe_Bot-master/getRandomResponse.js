@@ -15,6 +15,8 @@ module.exports =
 		responses = getResponsesFunc.getResponses(message, responseData, responses);
 		
 		let numberOfResponses = responses.length;
+
+		let quote = 0;
 		
 		if(numberOfResponses > 1)
 		{
@@ -23,8 +25,14 @@ module.exports =
 			
 		}
 		
-		return responses[quote];
-		
+		if(quote)
+		{
+			return responses[quote];
+		}
+		else
+		{
+			return "No response found";
+		}
 	}
 
 }

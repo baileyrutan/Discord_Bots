@@ -8,13 +8,13 @@ const Discord = require('discord.js');
 const GabeBot = new Discord.Client();
 
 // Check for bot token
-const token = process.env.DISCORD_BOT_TOKEN;
+const token = process.env.DISCORD_TOKEN;
 if (!token) {
-	console.error('Error: DISCORD_BOT_TOKEN environment variable is not set!');
+	console.error('Error: DISCORD_TOKEN environment variable is not set!');
 	process.exit(1);
 }
 
-const responseData = readInDataFunc.readInData('responseData.csv');
+const responseData = readInDataFunc.readInData('responseData.txt');
 
 // On message received, begin executing this code
 // IF previous message is NOT from Gabebot, proceed
