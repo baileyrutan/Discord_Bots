@@ -10,17 +10,17 @@ module.exports =
 		let responseCounter = 0;
 		let quote = 0;
 		
+		// Convert message to lowercase for case-insensitive matching
+		const lowerCaseMessage = message.toLowerCase();
+		
 		for(let i = 0; i < responseData.length; i++)
 		{
-		
-			if(message.includes(responseData[i]['trigger']))
+			// Check if the lowercase message contains the trigger
+			if(lowerCaseMessage.includes(responseData[i]['trigger']))
 			{
-				
 				responses[responseCounter] = responseData[i]['quote'];
 				responseCounter++;
-				
 			}
-		
 		}
 
 		return responses;

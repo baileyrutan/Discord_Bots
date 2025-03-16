@@ -2,46 +2,31 @@
 // File: readInData.js
 // File Created: 11/18/2019
 
-const csv = require('csv');
 const fs = require('fs');
+const csvParse = require('csv-parse/sync'); // Use the sync version
 
 module.exports = 
 {
-
 	readInData : function(file)
 	{
-		
-		const response = [];
-
-		let readStream = fs.createReadStream(file);
-
-		let parser = csv.parse({columns:true});
-
-		parser.on('readable', function()
-		{
-				
-			while(record = parser.read())
-			{
-
-				response.push(record);
-				
-			}
-
-		});
-
-		parser.on('error', function(err) 
-		{
+		try {
+			// Read file synchronously
+			const fileContent = fs.readFileSync(file, 'utf8');
 			
-			console.log(err.message);
+			// Parse CSV synchronously
+			const records = csvParse.parse(fileContent, {
+				columns: true,
+				skip_empty_lines: true
+			});
 			
-		});
-		
-		readStream.pipe(parser);
-		
-		return response;
-		
+			console.log(`Successfully loaded ${records.length} responses from ${file}`);
+			return records;
+			
+		} catch (error) {
+			console.error(`Error reading CSV file ${file}:`, error);
+			return [];
+		}
 	}
-
 }
 
 // References: 

@@ -25,11 +25,13 @@ GabeBot.on('message', (message) =>
 	if(message.author.bot === false)
 	{
 		let messageContent = message.content;
-		messageContent = messageContent.toLowerCase();
 		
 		const response = getRandomResponseFunc.getRandomResponse(messageContent, responseData);
 
-		message.channel.send(response);
+		if(response)
+		{
+			message.channel.send(response);
+		}
 	}
 });
 
