@@ -7,7 +7,7 @@ const config = {
     // API endpoints
     api: {
         baseUrl: 'discord.com',
-        version: 'v6'
+        version: 'v9'
     },
     
     // File paths
