@@ -14,7 +14,7 @@ if (!token) {
 	process.exit(1);
 }
 
-const responseData = readInDataFunc.readInData('responseData.txt');
+const responseData = readInDataFunc.readInData('responseData.csv');
 
 // On message received, begin executing this code
 // IF previous message is NOT from Gabebot, proceed
