@@ -1,12 +1,16 @@
 const getRandomResponseFunc = require('../utils/getRandomResponse');
 const readInDataFunc = require('../utils/readInData');
-const { config } = require('../config/config');
 
 /**
  * Handles response logic for the bot
  */
 class ResponseService {
-    constructor() {
+    /**
+     * Creates a new response service
+     * @param {Object} config - Configuration object
+     */
+    constructor(config) {
+        this.config = config;
         this.responseData = null;
         this.initialized = false;
     }
@@ -16,11 +20,19 @@ class ResponseService {
      */
     initialize() {
         if (!this.initialized) {
-            this.responseData = readInDataFunc.readInData(config.paths.responseData);
+            this.responseData = this.loadResponseData();
             this.initialized = true;
             console.log(`Loaded ${this.responseData.length} responses`);
         }
         return this;
+    }
+    
+    /**
+     * Loads response data from file
+     * @returns {Array} - Response data
+     */
+    loadResponseData() {
+        return readInDataFunc.readInData(this.config.paths.responseData);
     }
     
     /**
@@ -37,4 +49,4 @@ class ResponseService {
     }
 }
 
-module.exports = new ResponseService(); 
+module.exports = ResponseService; 

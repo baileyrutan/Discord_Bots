@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const { config, validateConfig } = require('./config/config');
-const responseService = require('./services/responseService');
-const ApiService = require('./services/apiService');
+const { validateConfig } = require('./config/config');
+const ServiceFactory = require('./services/serviceFactory');
+const GuildFormatter = require('./formatters/guildFormatter');
 
 /**
  * Main Discord bot class
@@ -10,6 +10,11 @@ class GabeBotClient {
     constructor() {
         // Validate configuration
         validateConfig();
+        
+        // Set up services
+        const services = ServiceFactory.createServices();
+        this.guildService = services.guildService;
+        this.responseService = services.responseService;
         
         // Initialize Discord client
         this.client = new Discord.Client();
@@ -39,14 +44,13 @@ class GabeBotClient {
         console.log(`Logged in as ${this.client.user.tag}!`);
         
         // Initialize response service
-        responseService.initialize();
+        this.responseService.initialize();
         
         // Fetch guild information if server ID is provided
-        if (config.serverId) {
-            this.fetchGuildInfo(config.serverId);
-            
-            // Add this line to fetch scheduled events
-            this.fetchGuildEvents(config.serverId);
+        const serverId = process.env.BOT_TEST_SERVER_ID;
+        if (serverId) {
+            await this.fetchGuildInfo(serverId);
+            await this.fetchGuildEvents(serverId);
         }
     }
     
@@ -59,7 +63,7 @@ class GabeBotClient {
         if (message.author.bot) return;
         
         // Get response for message
-        const response = responseService.getResponse(message.content);
+        const response = this.responseService.getResponse(message.content);
         
         // Send response if one was found
         if (response) {
@@ -69,48 +73,28 @@ class GabeBotClient {
     }
     
     /**
-     * Fetches guild information
+     * Fetches and displays guild information
      * @param {string} guildId - The guild ID to fetch
      */
     async fetchGuildInfo(guildId) {
         try {
-            const guild = await ApiService.fetchGuild(guildId);
-            console.log('Guild Information:');
-            console.log(`Name: ${guild.name}`);
-            console.log(`ID: ${guild.id}`);
-            console.log(`Owner ID: ${guild.owner_id}`);
-            console.log(`Member Count: ${guild.approximate_member_count || 'Unknown'}`);
+            const guild = await this.guildService.fetchGuild(guildId);
+            console.log(GuildFormatter.formatGuildInfo(guild));
+            return guild;
         } catch (error) {
             console.error('Failed to fetch guild information:', error.message);
+            return null;
         }
     }
     
     /**
-     * Fetches and logs scheduled events for a guild
+     * Fetches and displays scheduled events for a guild
      * @param {string} guildId - The guild ID to fetch events for
      */
     async fetchGuildEvents(guildId) {
         try {
-            const events = await ApiService.fetchGuildScheduledEvents(guildId);
-            console.log(`Found ${events.length} scheduled events for guild ${guildId}:`);
-            
-            if (events.length > 0) {
-                events.forEach((event, index) => {
-                    console.log(`\nEvent ${index + 1}:`);
-                    console.log(`Name: ${event.name}`);
-                    console.log(`Description: ${event.description || 'No description'}`);
-                    console.log(`Start Time: ${new Date(event.scheduled_start_time).toLocaleString()}`);
-                    if (event.scheduled_end_time) {
-                        console.log(`End Time: ${new Date(event.scheduled_end_time).toLocaleString()}`);
-                    }
-                    console.log(`Status: ${event.status}`);
-                    console.log(`Creator: ${event.creator_id}`);
-                    console.log(`Location: ${event.entity_metadata?.location || 'No location'}`);
-                });
-            } else {
-                console.log('No scheduled events found');
-            }
-            
+            const events = await this.guildService.fetchGuildScheduledEvents(guildId);
+            console.log(GuildFormatter.formatGuildEvents(events));
             return events;
         } catch (error) {
             console.error('Failed to fetch guild events:', error.message);
@@ -130,7 +114,7 @@ class GabeBotClient {
      * Starts the bot
      */
     start() {
-        this.client.login(config.token)
+        this.client.login(process.env.DISCORD_TOKEN)
             .catch(err => {
                 console.error('Failed to login:', err);
                 process.exit(1);
