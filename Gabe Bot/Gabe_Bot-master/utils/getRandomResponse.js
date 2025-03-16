@@ -24,8 +24,5 @@ module.exports = {
 		if(quote >= 0 && numberOfResponses > 0) {
 			return responses[quote];
 		}
-		
-		// Default fallback when no response found
-		return "I don't know how to respond to that.";
 	}
 }; 
