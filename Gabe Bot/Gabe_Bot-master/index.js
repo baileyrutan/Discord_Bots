@@ -6,6 +6,7 @@ const readInDataFunc = require('./readInData.js');
 const getRandomResponseFunc = require('./getRandomResponse.js');
 const Discord = require('discord.js');
 const GabeBot = new Discord.Client();
+const https = require('https');
 
 // Check for bot token
 const token = process.env.DISCORD_TOKEN;
@@ -40,8 +41,50 @@ GabeBot.on('error', error => {
 	console.error('Discord client error:', error);
 });
 
+// When the bot is ready, get guild information
 GabeBot.on('ready', () => {
 	console.log(`Logged in as ${GabeBot.user.tag}!`);
+	const serverId = process.env.BOT_TEST_SERVER_ID;
+	
+	// Make a direct API call
+	const options = {
+		hostname: 'discord.com',
+		path: `/api/v6/guilds/${serverId}`,
+		method: 'GET',
+		headers: {
+			'Authorization': `Bot ${token}`,
+			'Content-Type': 'application/json'
+		}
+	};
+	
+	const req = https.request(options, (res) => {
+		let data = '';
+		
+		res.on('data', (chunk) => {
+			data += chunk;
+		});
+		
+		res.on('end', () => {
+			if (res.statusCode === 200) {
+				const guild = JSON.parse(data);
+				console.log('Guild Information:');
+				console.log(`Name: ${guild.name}`);
+				console.log(`ID: ${guild.id}`);
+				console.log(`Owner ID: ${guild.owner_id}`);
+				console.log('guild', guild);
+				console.log(`Member Count: ${guild.approximate_member_count}`);
+			} else {
+				console.log(`Failed to get guild: ${res.statusCode}`);
+				console.log(data);
+			}
+		});
+	});
+	
+	req.on('error', (error) => {
+		console.error('Error making request:', error);
+	});
+	
+	req.end();
 });
 
 GabeBot.login(token);
