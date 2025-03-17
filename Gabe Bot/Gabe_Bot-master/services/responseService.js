@@ -18,7 +18,6 @@ class ResponseService {
         if (!this.initialized) {
             this.responseData = readInDataFunc.readInData(configuration.paths.responseData);
             this.initialized = true;
-            console.log(`Loaded ${this.responseData.length} responses`);
         }
         return this;
     }

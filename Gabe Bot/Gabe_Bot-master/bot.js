@@ -36,8 +36,6 @@ class GabeBotClient {
      * Handles bot ready event
      */
     async handleReady() {
-        console.log(`Logged in as ${this.client.user.tag}!`);
-        
         // Initialize response service
         responseService.initialize();
         
