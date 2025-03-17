@@ -1,8 +1,8 @@
 // Centralized configuration management
-const config = {
+const configuration = {
     // Bot configuration
     token: process.env.DISCORD_TOKEN,
-    serverId: process.env.BOT_TEST_SERVER_ID,
+    serverId: process.env.BASEMENT_SERVER_ID,
     
     // API endpoints
     api: {
@@ -12,18 +12,18 @@ const config = {
     
     // File paths
     paths: {
-        responseData: 'responseData.csv'
+        responseData: 'chat_trigger_response_data.csv'
     }
 };
 
 // Validate required configuration
 function validateConfig() {
-    if (!config.token) {
+    if (!configuration.token) {
         throw new Error('DISCORD_TOKEN environment variable is not set!');
     }
 }
 
 module.exports = {
-    config,
+    configuration,
     validateConfig
 }; 

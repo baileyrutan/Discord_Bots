@@ -1,6 +1,6 @@
 const getRandomResponseFunc = require('../utils/getRandomResponse');
 const readInDataFunc = require('../utils/readInData');
-const { config } = require('../config/config');
+const { configuration } = require('../configuration/configuration');
 
 /**
  * Handles response logic for the bot
@@ -16,7 +16,7 @@ class ResponseService {
      */
     initialize() {
         if (!this.initialized) {
-            this.responseData = readInDataFunc.readInData(config.paths.responseData);
+            this.responseData = readInDataFunc.readInData(configuration.paths.responseData);
             this.initialized = true;
             console.log(`Loaded ${this.responseData.length} responses`);
         }

@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const { config, validateConfig } = require('./config/config');
+const { configuration, validateConfig } = require('./configuration/configuration');
 const responseService = require('./services/responseService');
-const ApiService = require('./services/apiService');
+const DiscordApiService = require('./services/discordApiService');
 
 /**
  * Main Discord bot class
@@ -42,11 +42,11 @@ class GabeBotClient {
         responseService.initialize();
         
         // Fetch guild information if server ID is provided
-        if (config.serverId) {
-            this.fetchGuildInfo(config.serverId);
+        if (configuration.serverId) {
+            this.fetchGuildInfo(configuration.serverId);
             
             // Add this line to fetch scheduled events
-            this.fetchGuildEvents(config.serverId);
+            this.fetchGuildEvents(configuration.serverId);
         }
     }
     
@@ -74,7 +74,7 @@ class GabeBotClient {
      */
     async fetchGuildInfo(guildId) {
         try {
-            const guild = await ApiService.fetchGuild(guildId);
+            const guild = await DiscordApiService.fetchGuild(guildId);
             console.log('Guild Information:');
             console.log(`Name: ${guild.name}`);
             console.log(`ID: ${guild.id}`);
@@ -91,7 +91,7 @@ class GabeBotClient {
      */
     async fetchGuildEvents(guildId) {
         try {
-            const events = await ApiService.fetchGuildScheduledEvents(guildId);
+            const events = await DiscordApiService.fetchGuildScheduledEvents(guildId);
             console.log(`Found ${events.length} scheduled events for guild ${guildId}:`);
             
             if (events.length > 0) {
@@ -130,7 +130,7 @@ class GabeBotClient {
      * Starts the bot
      */
     start() {
-        this.client.login(config.token)
+        this.client.login(configuration.token)
             .catch(err => {
                 console.error('Failed to login:', err);
                 process.exit(1);

@@ -1,10 +1,10 @@
 const https = require('https');
-const { config } = require('../config/config');
+const { configuration } = require('../configuration/configuration');
 
 /**
  * Makes requests to the Discord API
  */
-class ApiService {
+class DiscordApiService {
     /**
      * Fetches guild information from Discord API
      * @param {string} guildId - ID of the guild to fetch
@@ -13,11 +13,11 @@ class ApiService {
     static fetchGuild(guildId) {
         return new Promise((resolve, reject) => {
             const options = {
-                hostname: config.api.baseUrl,
-                path: `/api/${config.api.version}/guilds/${guildId}`,
+                hostname: configuration.api.baseUrl,
+                path: `/api/${configuration.api.version}/guilds/${guildId}`,
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bot ${config.token}`,
+                    'Authorization': `Bot ${configuration.token}`,
                     'Content-Type': 'application/json'
                 }
             };
@@ -58,11 +58,11 @@ class ApiService {
     static fetchGuildScheduledEvents(guildId) {
         return new Promise((resolve, reject) => {
             const options = {
-                hostname: config.api.baseUrl,
-                path: `/api/${config.api.version}/guilds/${guildId}/scheduled-events`,
+                hostname: configuration.api.baseUrl,
+                path: `/api/${configuration.api.version}/guilds/${guildId}/scheduled-events`,
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bot ${config.token}`,
+                    'Authorization': `Bot ${configuration.token}`,
                     'Content-Type': 'application/json'
                 }
             };
@@ -96,4 +96,4 @@ class ApiService {
     }
 }
 
-module.exports = ApiService; 
+module.exports = DiscordApiService; 
