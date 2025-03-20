@@ -16,7 +16,7 @@ A Discord bot inspired by Gabe Newell that responds to messages with predefined 
 
 ## How It Works
 
-1. The bot reads response triggers and quotes from `responseData.csv`
+1. The bot reads response triggers and quotes from `chat_trigger_response_data.csv`
 2. When a Discord user sends a message, the bot checks if it contains any trigger phrases
 3. If a match is found, the bot responds with the corresponding quote
 4. For messages with multiple matching triggers, a random response is selected
