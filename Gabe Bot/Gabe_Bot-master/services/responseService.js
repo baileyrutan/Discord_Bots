@@ -1,4 +1,4 @@
-const getRandomResponseFunc = require('../utils/getRandomResponse');
+const responseHandler = require('../utils/responseHandler');
 const readInDataFunc = require('../utils/readInData');
 const { configuration } = require('../configuration/configuration');
 
@@ -25,14 +25,14 @@ class ResponseService {
     /**
      * Gets a response for a message
      * @param {string} message - The message to respond to
-     * @returns {string|null} - Response or null if no match
+     * @returns {string} - Response message
      */
     getResponse(message) {
         if (!this.initialized) {
             this.initialize();
         }
         
-        return getRandomResponseFunc.getRandomResponse(message, this.responseData);
+        return responseHandler.getResponse(message, this.responseData);
     }
 }
 
