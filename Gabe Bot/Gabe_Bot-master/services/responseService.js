@@ -18,6 +18,10 @@ class ResponseService {
         if (!this.initialized) {
             this.responseData = readInDataFunc.readInData(configuration.paths.responseData);
             this.initialized = true;
+            
+            // Handle potential undefined response data
+            const responseCount = this.responseData ? this.responseData.length : 0;
+            console.log(`Loaded ${responseCount} responses`);
         }
         return this;
     }
@@ -32,7 +36,9 @@ class ResponseService {
             this.initialize();
         }
         
-        return responseHandler.getResponse(message, this.responseData);
+        // Ensure responseData is always an array
+        const data = this.responseData || [];
+        return responseHandler.getResponse(message, data);
     }
 }
 
